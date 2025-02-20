@@ -38,17 +38,20 @@ cd_hook() {
             case "$JAVA_ENV" in
                 8)
                     # jdk8
-                    export JAVA_HOME=$(/usr/libexec/java_home -v1.8)
+		    export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+		    sudo update-alternatives --set java $JAVA_HOME
                     echo -e "${green}Done${nc}"
                     ;;
                 11)
                     # jdk11
-                    export JAVA_HOME=$(/usr/libexec/java_home -v11)
+		    export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64/bin/java
+		    sudo update-alternatives --set java $JAVA_HOME
                     echo -e "${green}Done${nc}"
                     ;;
                 17)
                     # jdk17
-                    export JAVA_HOME=$(/usr/libexec/java_home -v17)
+		    export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64/bin/java
+		    sudo update-alternatives --set java $JAVA_HOME
                     echo -e "${green}Done${nc}"
                     ;;
                 *)

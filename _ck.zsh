@@ -19,10 +19,10 @@ ck() {
   target="$2"
   target_path="~/"
   if [ "$1" = "ysw" ]; then
-      target_path="/Users/kuo/Documents/YSW/Source/"
+      target_path="/home/kuo/Documents/YSW/"
   fi
   if [ "$1" = "ats" ]; then
-      target_path="/Users/kuo/Documents/ChanningKuo/projects/ats/"
+      target_path="/home/kuo/Documents/ats/"
   fi
 
   if [ "$2" != "" ]; then
@@ -55,17 +55,20 @@ ck() {
         case "$JAVA_ENV" in
             8)
                 # jdk8
-                export JAVA_HOME=$(/usr/libexec/java_home -v1.8)
+                export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
+		sudo update-alternatives --set java $JAVA_HOME
                 echo -e "${green}Done${nc}"
                 ;;
             11)
                 # jdk11
-                export JAVA_HOME=$(/usr/libexec/java_home -v11)
+                export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64/bin/java
+		sudo update-alternatives --set java $JAVA_HOME
                 echo -e "${green}Done${nc}"
                 ;;
             17)
                 # jdk17
-                export JAVA_HOME=$(/usr/libexec/java_home -v17)
+                export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64/bin/java
+		sudo update-alternatives --set java $JAVA_HOME
                 echo -e "${green}Done${nc}"
                 ;;
             *)
@@ -115,9 +118,9 @@ _cdk_completion()
   local -a target_directions
   # 根据输入的 context 决定补全内容
   if [[ "$context" == "ysw" ]]; then
-    target_directions=("${(@f)$(ls /Users/kuo/Documents/YSW/Source/)}")
+    target_directions=("${(@f)$(ls /home/kuo/Documents/YSW/)}")
   elif [[ "$context" == "ats" ]]; then
-    target_directions=("${(@f)$(ls /Users/kuo/Documents/ChanningKuo/projects/ats/)}")
+    target_directions=("${(@f)$(ls /home/kuo/Documents/ats/)}")
   else
     target_directions=("ysw" "ats")  # 默认提供可选的第一个参数
   fi
