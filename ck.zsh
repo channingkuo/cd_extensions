@@ -14,15 +14,26 @@ ck() {
   local original_pwd=$PWD
   local original_path=$PATH
   local CONFIG_FILE="kuo.env"
+  local map_info="/Users/kuo/Documents/ChanningKuo/Shell/kuo/cd_extensions/.ck-config.json"
 
   folder_target="$1"
   target="$2"
   target_path="~/"
-  if [ "$1" = "ysw" ]; then
-      target_path="/Users/kuo/Documents/YSW/Source/"
+
+  # 读取配置文件的keys
+  local -a keys
+  if [[ -f "$map_info" && -r "$map_info" ]]; then
+      keys=("${(f)$(jq -r '.[].key' "$map_info" 2>/dev/null)}")
+      if [[ ${#keys} -eq 0 ]]; then
+          keys=(ats ysw)
+      fi
+  else
+      keys=(ats ysw)
   fi
-  if [ "$1" = "ats" ]; then
-      target_path="/Users/kuo/Documents/ChanningKuo/projects/ats/"
+
+  if [[ -n "$1" && ${#keys} -gt 0 ]]; then
+      target_path=$(jq -r --arg key "$1" '.[] | select(.key == $key) | .path' "$map_info" 2>/dev/null)
+      [[ "$target_path" == "null" || -z "$target_path" ]] && target_path="$1"
   fi
 
   if [ "$2" != "" ]; then
@@ -160,23 +171,4 @@ ck() {
       echo -e "${red}git status${nc}"
       git status
   fi
-}
-
-compdef _cdk_completion ck
-
-_cdk_completion()
-{
-  # 获取第一个参数（即命令名后的第一个输入参数）
-  local context="${words[2]}"
-  local -a target_directions
-  # 根据输入的 context 决定补全内容
-  if [[ "$context" == "ysw" ]]; then
-    target_directions=("${(@f)$(ls /Users/kuo/Documents/YSW/Source/)}")
-  elif [[ "$context" == "ats" ]]; then
-    target_directions=("${(@f)$(ls /Users/kuo/Documents/ChanningKuo/projects/ats/)}")
-  else
-    target_directions=("ysw" "ats")  # 默认提供可选的第一个参数
-  fi
-  # target_directions=("${(@f)$(ls ${context})}")
-  _describe 'command' target_directions
 }
