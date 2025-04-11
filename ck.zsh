@@ -55,13 +55,15 @@ ck() {
     CONDA_ENV=$(grep "Conda Env:" "$CONFIG_FILE" | awk -F ': ' '{print $2}')
     if [ -n "$CONDA_ENV" ]; then
         echo ""
-        echo -e "${red}Swicthing Conda Env: $CONDA_ENV${nc}"
+        echo -e "${red}Switching Conda Env: $CONDA_ENV${nc}"
         conda activate "$CONDA_ENV"
     fi
     # 提取Java环境参数
     JAVA_ENV=$(grep "Java:" "$CONFIG_FILE" | awk -F ': ' '{print $2}')
     if [ -n "$JAVA_ENV" ]; then
         echo ""
+        echo -e "${red}Switching Conda Env: emacs${nc}"
+        conda activate emacs
         echo -e "${red}Switching to Java: $JAVA_ENV${nc}"
         case "$JAVA_ENV" in
             8)
